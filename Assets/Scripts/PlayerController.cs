@@ -16,12 +16,17 @@ public class PlayerController : MonoBehaviour
     [Header("Jumping")]
     public float jumpFroce = 5f;
 
+    [Header("Falling")]
+    public float fallForce = 5f;
+    public float fallMultiplier = 0.01f;
+    bool isFalling;
+
     [Header("keybinds")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
 
     [Header("Drag")]
     public float groundDrag = 6f;
-    public float airDrag = 2f;
+    public float JumpDrag = 2f;
 
     float rbDrag = 6f;
 
@@ -67,7 +72,10 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        //print(isGrounded);
+        if(rb.velocity.y > 0f) { isFalling = true; }
+        if(isGrounded) { isFalling = false; }
+
+        //print(isGrounded)
 
         MyInput();
         ControlDrag();
@@ -89,8 +97,11 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        rb.AddForce(transform.up * jumpFroce, ForceMode.Impulse);
+        if (isGrounded)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);
+            rb.AddForce(transform.up * jumpFroce, ForceMode.Impulse);
+        }
     }
 
     void ControlDrag()
@@ -101,7 +112,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            rb.drag = airDrag;
+            rb.drag = JumpDrag;
         }
     }
 
@@ -109,6 +120,13 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+
+        if (isFalling)
+        {
+            Vector3 fallVector = rb.velocity;
+            fallVector.y -= fallForce * fallMultiplier;
+            rb.velocity = fallVector;
+        }
     }
 
     void MovePlayer()
