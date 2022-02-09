@@ -14,12 +14,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float airMultiplier = 0.4f; //Keep the vlaue less than 1 
 
     [Header("Jumping")]
-    public float jumpFroce = 5f;
+    public float jumpForce = 5f;
 
     [Header("Falling")]
     public float fallForce = 5f;
-    public float fallMultiplier = 0.01f;
-    bool isFalling;
+    [SerializeField] bool isFalling;
 
     [Header("keybinds")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
@@ -72,7 +71,7 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if(rb.velocity.y > 0f) { isFalling = true; }
+        if(rb.velocity.y < 0f) { isFalling = true; }
         if(isGrounded) { isFalling = false; }
 
         //print(isGrounded)
@@ -99,9 +98,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded)
         {
-            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);
-            rb.AddForce(transform.up * jumpFroce, ForceMode.Impulse);
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
+    }
+
+    void Fall()
+    {
+        rb.AddForce(transform.up * -fallForce, ForceMode.Impulse);
     }
 
     void ControlDrag()
@@ -123,9 +126,7 @@ public class PlayerController : MonoBehaviour
 
         if (isFalling)
         {
-            Vector3 fallVector = rb.velocity;
-            fallVector.y -= fallForce * fallMultiplier;
-            rb.velocity = fallVector;
+            Fall();
         }
     }
 
