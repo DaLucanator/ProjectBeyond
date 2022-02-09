@@ -626,12 +626,20 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4144624013730120641, guid: 03e880951ac120945babaf909f05d9b4, type: 3}
+      propertyPath: JumpDrag
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144624013730120641, guid: 03e880951ac120945babaf909f05d9b4, type: 3}
       propertyPath: fallForce
-      value: 15
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144624013730120641, guid: 03e880951ac120945babaf909f05d9b4, type: 3}
+      propertyPath: jumpForce
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 4144624013730120641, guid: 03e880951ac120945babaf909f05d9b4, type: 3}
       propertyPath: jumpFroce
-      value: 45
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 4144624013730120641, guid: 03e880951ac120945babaf909f05d9b4, type: 3}
       propertyPath: moveSpeed
@@ -639,11 +647,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4144624013730120641, guid: 03e880951ac120945babaf909f05d9b4, type: 3}
       propertyPath: groundDrag
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4144624013730120641, guid: 03e880951ac120945babaf909f05d9b4, type: 3}
       propertyPath: airMultiplier
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4144624013730120641, guid: 03e880951ac120945babaf909f05d9b4, type: 3}
       propertyPath: fallMultiplier
