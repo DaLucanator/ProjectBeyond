@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     float playerHeight = 2f;
-
-    [SerializeField] Transform orientation;
  
     [Header("Movement")]
     public float moveSpeed = 6f;
@@ -38,7 +36,7 @@ public class PlayerController : MonoBehaviour
     bool isGrounded;
     public float groundDistance = 0.4f;
 
-    Vector3 moveDirection;
+    [SerializeField] Vector3 moveDirection;
     Vector3 slopeMoveDirection;
 
     Rigidbody rb;
@@ -65,33 +63,34 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        GameEvents.current.SetHorizontalMovement += MyInput;
     }
 
     private void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if(rb.velocity.y < 0f) { isFalling = true; }
+        if(rb.velocity.y < -0.1f) { isFalling = true; }
         if(isGrounded) { isFalling = false; }
 
         //print(isGrounded)
 
-        MyInput();
         ControlDrag();
 
-        if (Input.GetKeyDown(jumpKey) && isGrounded)
-        {
-            Jump();
-        }
+       // if (Input.GetKeyDown(jumpKey) && isGrounded)
+       // {
+       //     Jump();
+        //}
 
         slopeMoveDirection = Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
     }
 
-    void MyInput()
+    void MyInput(float moveDir)
     {
-        horizontalMovement = Input.GetAxisRaw("Horizontal");
+        horizontalMovement = moveDir;
 
-        moveDirection = orientation.forward * verticalMovement + orientation.right * horizontalMovement;
+        moveDirection = transform.forward * verticalMovement + transform.right * horizontalMovement;
     }
 
     void Jump()
