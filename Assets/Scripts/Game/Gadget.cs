@@ -30,7 +30,6 @@ public class PoweredGadget: Gadget
 
     private void PowerOn(int id)
     {
-        Debug.Log(gameObject.GetInstanceID());
         if (id == gameObject.GetInstanceID()) 
         { 
             isPowered = true;

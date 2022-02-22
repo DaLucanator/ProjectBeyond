@@ -5,60 +5,98 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
-    private Controls controls;
-    private bool canCheck;
+    private PlayerControls playerControls;
+    [SerializeField] private bool canCheck;
     [SerializeField] private Vector2 startPos, currentPos;
-    private float moveDir;
-    private float lastMoveDir;
+    [SerializeField] private float moveDir, lastMoveDir;
+    [SerializeField] private float moveThreshold;
+    private bool isMoving;
 
     private void Awake()
     {
-        controls = new Controls();
+        playerControls = new PlayerControls();
     }
 
     private void OnEnable()
     {
-        controls.Enable();
+        playerControls.Enable();
     }
 
     private void OnDisable()
     {
-        controls.Disable();
+        playerControls.Disable();
     }
 
     void Start()
     {
-        controls.Touch.PrimaryContact.performed += ctx => StartTouchPrimary(ctx);
-        controls.Touch.PrimaryContact.canceled += ctx => EndTouchPrimary(ctx);
+        playerControls.Touch.PrimaryContact.performed += ctx => StartTouchPrimary(ctx);
+        playerControls.Touch.PrimaryContact.canceled += ctx => EndTouchPrimary(ctx);
+        playerControls.Touch.SecondaryContact.performed += ctx => StartTouchSecondary(ctx);
+        playerControls.Touch.PrimaryContact.canceled += ctx => EndTouchPrimary(ctx);
+        playerControls.Touch.JumpKeyboard.performed += ctx => Jump();
     }
 
     private void Update()
     {
         if(canCheck)
         {
-            currentPos = ScreenToWorld(Camera.main, controls.Touch.PrimaryPosition.ReadValue<Vector2>());
-            if (currentPos.x > startPos.x) { moveDir = 1; }
-            else if (currentPos.x < startPos.x) { moveDir = -1; ; }
-            else { moveDir = 0; }
-            if (moveDir != lastMoveDir)
+            isMoving = true;
+            currentPos = ScreenToWorld(Camera.main, playerControls.Touch.PrimaryPosition.ReadValue<Vector2>());
+            if (startPos.x - currentPos.x > moveThreshold || currentPos.x - startPos.x > moveThreshold)
             {
-                lastMoveDir = moveDir;
-                GameEvents.current.SetHorizontalMovementMethod(moveDir);
+                if (currentPos.x > startPos.x) { moveDir = 1; }
+                else if (currentPos.x < startPos.x) { moveDir = -1; ; }
+                if (moveDir != lastMoveDir)
+                {
+                    lastMoveDir = moveDir;
+                    GameEvents.current.SetHorizontalMovementMethod(moveDir);
+                }
             }
+            else { GameEvents.current.SetHorizontalMovementMethod(0); }
         }
+    }
+
+    private void Jump()
+    {
+        GameEvents.current.JumpMethod();
     }
 
 
     private void StartTouchPrimary(InputAction.CallbackContext context)
     {
         canCheck = true;
-        startPos = ScreenToWorld(Camera.main, controls.Touch.PrimaryPosition.ReadValue<Vector2>());
+        if(!isMoving)
+        {
+            startPos = ScreenToWorld(Camera.main, playerControls.Touch.PrimaryPosition.ReadValue<Vector2>());
+        }
+        if (context.interaction is UnityEngine.InputSystem.Interactions.MultiTapInteraction)
+        {
+            Jump();
+            isMoving = false;
+        }
+    }
+
+
+    private void StartTouchSecondary(InputAction.CallbackContext context)
+    {
+        canCheck = true;
+        Debug.Log("2");
+        if (!isMoving)
+        {
+            startPos = ScreenToWorld(Camera.main, playerControls.Touch.SecondaryPosition.ReadValue<Vector2>());
+        }
+        if (context.interaction is UnityEngine.InputSystem.Interactions.MultiTapInteraction)
+        {
+            Jump();
+            isMoving = false;
+        }
     }
 
     private void EndTouchPrimary(InputAction.CallbackContext context)
     {
-        canCheck = false;
-        GameEvents.current.SetHorizontalMovementMethod(0);
+            canCheck = false;
+            GameEvents.current.SetHorizontalMovementMethod(0);
+            isMoving = false;
     }
 
     private Vector3 ScreenToWorld(Camera camera, Vector3 position )
@@ -69,6 +107,6 @@ public class InputManager : MonoBehaviour
 
     public Vector2 PrimaryPosition()
     {
-        return ScreenToWorld(Camera.main, controls.Touch.PrimaryPosition.ReadValue<Vector2>());
+        return ScreenToWorld(Camera.main, playerControls.Touch.PrimaryPosition.ReadValue<Vector2>());
     }
 }

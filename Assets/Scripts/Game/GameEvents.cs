@@ -29,4 +29,10 @@ public class GameEvents : MonoBehaviour
     {
         if (SetHorizontalMovement != null) { SetHorizontalMovement(direction); }
     }
+
+    public event Action Jump;
+    public void JumpMethod()
+    {
+        if (Jump != null) { Jump(); }
+    }
 }

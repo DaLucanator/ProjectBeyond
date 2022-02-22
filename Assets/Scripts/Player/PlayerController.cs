@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
         rb.freezeRotation = true;
 
         GameEvents.current.SetHorizontalMovement += MyInput;
+        GameEvents.current.Jump += Jump;
     }
 
     private void Update()
