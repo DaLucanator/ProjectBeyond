@@ -52,7 +52,11 @@ public class InputManager : MonoBehaviour
                     GameEvents.current.SetHorizontalMovementMethod(moveDir);
                 }
             }
-            else { GameEvents.current.SetHorizontalMovementMethod(0); }
+            else 
+            {
+                moveDir = 0;
+                GameEvents.current.SetHorizontalMovementMethod(0); 
+            }
         }
     }
 
