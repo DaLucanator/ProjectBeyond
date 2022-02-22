@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
     float rbDrag = 6f;
 
-    float horizontalMovement;
+    [SerializeField] float horizontalMovement;
     float verticalMovement;
 
     [Header("Ground Detection")]
@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
     Vector3 slopeMoveDirection;
 
     Rigidbody rb;
+    private Animator animator;
+    private GameObject mech;
+    private int dir;
 
     RaycastHit slopeHit;
 
@@ -61,11 +64,15 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        animator = GetComponentInChildren<Animator>();
+
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        mech = GameObject.FindGameObjectWithTag("Mech");
 
         GameEvents.current.SetHorizontalMovement += MyInput;
         GameEvents.current.Jump += Jump;
+        dir = 1;
     }
 
     private void Update()
@@ -92,12 +99,30 @@ public class PlayerController : MonoBehaviour
         horizontalMovement = moveDir;
 
         moveDirection = transform.forward * verticalMovement + transform.right * horizontalMovement;
+
+        if (horizontalMovement == 1)
+        {
+            if(dir != 1)
+            {
+                dir = 1;
+                mech.transform.Rotate(0, 180, 0);
+            }
+        }
+        if (horizontalMovement == -1)
+        {
+            if (dir != -1)
+            {
+                dir = -1;
+                mech.transform.Rotate(0, 180, 0);
+            }
+        }
     }
 
     void Jump()
     {
         if (isGrounded)
         {
+            animator.SetBool("Jump", true);
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
     }
@@ -135,16 +160,28 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && !OnSlope())
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier, ForceMode.Acceleration);
+            animator.SetBool("Jump", false);
+            if(moveDirection != Vector3.zero)
+            {
+                animator.SetBool("Walking", true);
+            }
+            else { animator.SetBool("Walking", false); }
         }
         else if (isGrounded && OnSlope())
         {
             rb.AddForce(slopeMoveDirection.normalized * moveSpeed * movementMultiplier, ForceMode.Acceleration);
-
+            animator.SetBool("Jump", false);
+            if (moveDirection != Vector3.zero)
+            {
+                animator.SetBool("Walking", true);
+            }
+            else { animator.SetBool("Walking", false); }
         }
         else if (!isGrounded)
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier * airMultiplier, ForceMode.Acceleration);
-
+            animator.SetBool("Walking", false);
         }
+
     }
 }
