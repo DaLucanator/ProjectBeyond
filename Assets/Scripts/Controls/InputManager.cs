@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private float moveDir, lastMoveDir;
     [SerializeField] private float moveThreshold;
     private bool isMoving;
+    private Animator animator;
 
     private void Awake()
     {
@@ -99,6 +100,8 @@ public class InputManager : MonoBehaviour
     private void EndTouchPrimary(InputAction.CallbackContext context)
     {
             canCheck = false;
+            moveDir = 0;
+            lastMoveDir = 0;
             GameEvents.current.SetHorizontalMovementMethod(0);
             isMoving = false;
     }
