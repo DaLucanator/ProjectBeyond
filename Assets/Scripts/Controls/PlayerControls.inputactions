@@ -1,0 +1,114 @@
+{
+    "name": "PlayerControls",
+    "maps": [
+        {
+            "name": "Touch",
+            "id": "98dce073-7d28-4fbc-8643-473b963b1c50",
+            "actions": [
+                {
+                    "name": "PrimaryPosition",
+                    "type": "PassThrough",
+                    "id": "b1fb56f1-d183-43d4-ac1b-8494e5682aae",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondaryPosition",
+                    "type": "PassThrough",
+                    "id": "6ac17787-3dae-406a-973b-6ac0a1f07c1f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "JumpKeyboard",
+                    "type": "PassThrough",
+                    "id": "edf7f8eb-3384-4701-baa8-291bf4392e1d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PrimaryContact",
+                    "type": "PassThrough",
+                    "id": "a799ef6c-392e-4012-af4f-e0a2531de3a1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Secondary Contact",
+                    "type": "PassThrough",
+                    "id": "9e097c8e-e9d1-49b8-b899-8f7fd1975cdd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a3ff8cfd-1a9f-4127-8f51-c88e7a555cc1",
+                    "path": "<Touchscreen>/primaryTouch/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrimaryPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5d360066-483b-404a-97da-8e6d3f01798f",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "JumpKeyboard",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3bc33bdd-03d9-4ba0-a68e-f6803582db43",
+                    "path": "<Touchscreen>/touch1/press",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Secondary Contact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb7f5f01-827c-434b-b816-f1122c04d0e6",
+                    "path": "<Touchscreen>/touch0/press",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrimaryContact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6be1162b-bb48-4032-a463-36af652eda1b",
+                    "path": "<Touchscreen>/touch0/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
